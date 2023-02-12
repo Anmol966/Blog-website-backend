@@ -7,6 +7,14 @@ const getBlogs = async (req,res)=>{
     res.status(200).json(blogs)
 }
 
+// get all blogs of a User
+const getUserBlogs = async (req,res)=>{
+    const {email} = req.params 
+    var query = {authorDetails:{email:email}}
+
+    const userBlogs = await Blog.find(query).sort({createdAt : -1})
+    res.status(200).json(userBlogs)
+}
 
 // get a single blog
 const getBlog = async (req,res) => {
@@ -26,16 +34,12 @@ const getBlog = async (req,res) => {
 
 // create new blog
 const  createBlog = async (req,res) => {
-    const {title, author, description, image, articleBody, categories} = req.body
+    const {authorDetails,title, description, image, articleBody, category} = req.body
 
     let emptyFields = []
 
     if(!title){
         emptyFields.push('title')
-    }
-        
-    if(!author){
-        emptyFields.push('author')
     }
         
     if(!description){
@@ -50,8 +54,8 @@ const  createBlog = async (req,res) => {
         emptyFields.push('articlebody')
     }
         
-    if(!categories){
-        emptyFields.push('categories')
+    if(!category){
+        emptyFields.push('category')
     }
    
 
@@ -61,7 +65,7 @@ const  createBlog = async (req,res) => {
 
     // add doc to db
     try{
-        const blog = await Blog.create({title, author, description, image, articleBody, categories})
+        const blog = await Blog.create({authorDetails,title, description, image, articleBody, category})
         res.status(200).json(blog)
     }catch(error){
         res.status(400).json({error : error.message})
@@ -91,7 +95,7 @@ const updateBlog = async (req,res)=>{
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({error: 'No Such Blog'})
     }
-
+    
     const blog = await Blog.findByIdAndUpdate({_id:id},{
         ...req.body
     })
@@ -106,6 +110,7 @@ const updateBlog = async (req,res)=>{
 
 module.exports = {
     getBlogs,
+    getUserBlogs,
     getBlog,
     createBlog,
     deleteBlog,

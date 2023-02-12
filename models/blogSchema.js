@@ -1,14 +1,25 @@
 const mongoose = require('mongoose');
+require('mongoose-type-email')
+
 
 const blogSchema = new mongoose.Schema({
+  
+  authorDetails: {
+    name:{
+      type: String,
+      required: true,
+    },
+    email:{
+      type: mongoose.SchemaTypes.Email,
+      required: true,
+    }
+  },
+  
   title: {
     type: String,
     required: true,
   },
-  author: {
-    type: String,
-    required: true,
-  },
+  
   description: {
     type: String,
     required: true,
@@ -21,9 +32,9 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  categories: [{
+  category: {
     type: String,
-  }],
+  },
 }, {
   timestamps: true,
 });

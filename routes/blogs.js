@@ -2,6 +2,7 @@ const express = require('express')
 
 const {
     getBlogs,
+    getUserBlogs,
     getBlog,
     createBlog,
     deleteBlog,
@@ -13,6 +14,9 @@ const router = express.Router()
 // GET all Blogs
 router.get('/',getBlogs)
 
+// GET all Blogs of a single user
+router.get('/email/:email',getUserBlogs)
+
 // GET a single Blog
 router.get('/:id', getBlog)
 
@@ -23,6 +27,6 @@ router.post('/', createBlog)
 router.delete('/:id',deleteBlog) 
 
 //UPDATE a new Blog
-router.patch('/:id',updateBlog)
+router.patch('/edit/:id',updateBlog)
 
 module.exports = router 
